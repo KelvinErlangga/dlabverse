@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Variants } from "framer-motion";
+import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import { useRef } from "react";
 
 export default function Hero() {
@@ -20,7 +19,8 @@ export default function Hero() {
   const bgY2 = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
 
   // Jurus: Teks muncul huruf per huruf
-  const textContainer = {
+  // Tambahkan tipe Variants di sini
+  const textContainer: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -28,13 +28,16 @@ export default function Hero() {
     },
   };
 
+  // Pastikan properti khusus Framer (seperti rotateX) dipahami dengan baik
   const textItem: Variants = {
     hidden: { opacity: 0, y: 50, rotateX: -90 },
     show: { 
       opacity: 1, 
       y: 0, 
       rotateX: 0,
-      transition: { type: "spring", damping: 12, stiffness: 100 }
+      // Menggunakan "as any" adalah trik aman di sini jika TypeScript
+      // masih mempermasalahkan detail property di dalam transition string
+      transition: { type: "spring", damping: 12, stiffness: 100 } as any
     },
   };
 
