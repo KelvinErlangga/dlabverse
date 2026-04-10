@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform, Variants } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, Variants } from "framer-motion";
 import { useRef } from "react";
 
 export default function Hero() {
@@ -12,14 +12,20 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Manipulasi pergerakan berdasarkan scroll
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "150%"]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const bgY1 = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const bgY2 = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+  // JURUS ANTI LAG: Haluskan nilai scroll menggunakan Spring
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  // Manipulasi pergerakan berdasarkan scroll yang sudah dihaluskan
+  const textY = useTransform(smoothProgress, [0, 1], ["0%", "150%"]);
+  const textOpacity = useTransform(smoothProgress, [0, 0.8], [1, 0]);
+  const bgY1 = useTransform(smoothProgress, [0, 1], ["0%", "50%"]);
+  const bgY2 = useTransform(smoothProgress, [0, 1], ["0%", "-50%"]);
 
   // Jurus: Teks muncul huruf per huruf
-  // Tambahkan tipe Variants di sini
   const textContainer: Variants = {
     hidden: { opacity: 0 },
     show: {
@@ -28,15 +34,12 @@ export default function Hero() {
     },
   };
 
-  // Pastikan properti khusus Framer (seperti rotateX) dipahami dengan baik
   const textItem: Variants = {
     hidden: { opacity: 0, y: 50, rotateX: -90 },
     show: { 
       opacity: 1, 
       y: 0, 
       rotateX: 0,
-      // Menggunakan "as any" adalah trik aman di sini jika TypeScript
-      // masih mempermasalahkan detail property di dalam transition string
       transition: { type: "spring", damping: 12, stiffness: 100 } as any
     },
   };
@@ -45,14 +48,20 @@ export default function Hero() {
 
   return (
     <section ref={targetRef} className="relative h-[120vh] flex items-start justify-center pt-40 overflow-hidden bg-white">
-      {/* Background Bola Parallax */}
-      <motion.div style={{ y: bgY1 }} className="absolute top-0 left-[-10%] w-[40rem] h-[40rem] bg-blue-200/50 rounded-full mix-blend-multiply filter blur-3xl"></motion.div>
-      <motion.div style={{ y: bgY2 }} className="absolute top-[30%] right-[-10%] w-[40rem] h-[40rem] bg-purple-200/50 rounded-full mix-blend-multiply filter blur-3xl"></motion.div>
+      {/* Background Bola Parallax - Ditambah will-change-transform untuk optimasi GPU */}
+      <motion.div 
+        style={{ y: bgY1 }} 
+        className="absolute top-0 left-[-10%] w-[40rem] h-[40rem] bg-blue-200/50 rounded-full mix-blend-multiply filter blur-3xl will-change-transform"
+      ></motion.div>
+      <motion.div 
+        style={{ y: bgY2 }} 
+        className="absolute top-[30%] right-[-10%] w-[40rem] h-[40rem] bg-purple-200/50 rounded-full mix-blend-multiply filter blur-3xl will-change-transform"
+      ></motion.div>
 
-      {/* Konten Utama yang bereaksi terhadap Scroll */}
+      {/* Konten Utama yang bereaksi terhadap Scroll - Ditambah will-change-transform */}
       <motion.div 
         style={{ y: textY, opacity: textOpacity }}
-        className="relative z-10 text-center max-w-5xl mx-auto px-6"
+        className="relative z-10 text-center max-w-5xl mx-auto px-6 will-change-transform"
       >
         <motion.div variants={textContainer} initial="hidden" animate="show">
           <h1 className="text-6xl md:text-8xl font-black text-gray-900 tracking-tighter leading-tight mb-6 perspective-[1000px]">
