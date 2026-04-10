@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Variants } from "framer-motion";
 import { useRef } from "react";
 
 export default function Hero() {
@@ -27,7 +28,7 @@ export default function Hero() {
     },
   };
 
-  const textItem = {
+  const textItem: Variants = {
     hidden: { opacity: 0, y: 50, rotateX: -90 },
     show: { 
       opacity: 1, 
