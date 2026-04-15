@@ -17,7 +17,7 @@ export default function Navbar() {
         </Link>
         <div className="hidden md:flex gap-8 font-medium text-gray-600">
           <Link href="#services" className="hover:text-blue-600 transition cursor-pointer">Services</Link>
-          <Link href="#portfolio" className="hover:text-blue-600 transition cursor-pointer">Portfolio</Link>
+          <Link href="/portfolio" className="hover:text-blue-600 transition cursor-pointer">Portfolio</Link>
           <Link href="#team" className="hover:text-blue-600 transition cursor-pointer">Our Team</Link>
         </div>
         <button className="bg-blue-600 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 transition shadow-lg shadow-blue-200 cursor-pointer">

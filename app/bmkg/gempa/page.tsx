@@ -4,8 +4,8 @@ import React from "react";
 async function getLatestQuake() {
   try {
     // Revalidate setiap 60 detik agar data selalu up-to-date
-    const res = await fetch("https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json", { 
-      next: { revalidate: 60 } 
+    const res = await fetch("https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json", {
+      next: { revalidate: 60 }
     });
     if (!res.ok) throw new Error("Gagal mengambil data gempa terbaru");
     const data = await res.json();
@@ -18,8 +18,8 @@ async function getLatestQuake() {
 
 async function getFeltQuakes() {
   try {
-    const res = await fetch("https://data.bmkg.go.id/DataMKG/TEWS/gempadirasakan.json", { 
-      next: { revalidate: 60 } 
+    const res = await fetch("https://data.bmkg.go.id/DataMKG/TEWS/gempadirasakan.json", {
+      next: { revalidate: 60 }
     });
     if (!res.ok) throw new Error("Gagal mengambil riwayat gempa");
     const data = await res.json();
@@ -55,22 +55,32 @@ export default async function GempaPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 p-6 md:p-12 overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-orange-500 flex items-center gap-3">
-          <span className="relative flex h-5 w-5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-5 w-5 bg-orange-500"></span>
-          </span>
-          Pusat Informasi Gempa Bumi
-        </h1>
+        <div className="flex items-center justify-between w-full mb-8">
+          <h1 className="text-3xl font-bold text-orange-500 flex items-center gap-3">
+            <span className="relative flex h-5 w-5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-5 w-5 bg-orange-500"></span>
+            </span>
+            Pusat Informasi Gempa Bumi
+          </h1>
+
+          <a
+            href={`/bmkg/gempa?refresh=${Date.now()}`}
+            className="flex items-center gap-2 bg-blue-500 text-grey-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-600 transition-colors shadow-md hover:shadow-lg"
+          >
+            Perbarui Informasi
+          </a>
+        </div>
+
 
         {/* --- HIGHLIGHT GEMPA TERBARU (HERO SECTION) --- */}
         <div className="bg-slate-900/50 rounded-3xl border border-slate-800 mb-12 shadow-2xl overflow-hidden flex flex-col lg:flex-row">
-          
+
           {/* Bagian Kiri: Peta Guncangan (Shakemap) */}
           <div className="w-full lg:w-5/12 bg-slate-950 relative p-4 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-800">
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10"></div>
-            <img 
-              src={`https://data.bmkg.go.id/DataMKG/TEWS/${latestQuake.Shakemap}`} 
+            <img
+              src={`https://data.bmkg.go.id/DataMKG/TEWS/${latestQuake.Shakemap}`}
               alt="Peta Guncangan Gempa"
               className="w-full h-auto object-cover rounded-xl border border-slate-800 relative z-0"
             />
@@ -113,11 +123,10 @@ export default async function GempaPage() {
             </div>
 
             {/* Warning Badge (Tsunami / Tidak) */}
-            <div className={`p-4 rounded-xl font-bold text-sm md:text-base text-center flex items-center justify-center gap-3 border shadow-lg ${
-              isTsunami 
-                ? "bg-red-500/10 text-red-500 border-red-500/30" 
-                : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-            }`}>
+            <div className={`p-4 rounded-xl font-bold text-sm md:text-base text-center flex items-center justify-center gap-3 border shadow-lg ${isTsunami
+              ? "bg-red-500/10 text-red-500 border-red-500/30"
+              : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+              }`}>
               {isTsunami ? "⚠️ PERINGATAN POTENSI TSUNAMI" : "✅ TIDAK BERPOTENSI TSUNAMI"}
               <span className="hidden md:inline">• {latestQuake.Potensi}</span>
             </div>
@@ -130,7 +139,7 @@ export default async function GempaPage() {
             <h3 className="text-xl font-bold mb-6 text-white border-b border-slate-800 pb-3">
               Riwayat Gempa Dirasakan Terakhir
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {feltQuakes.map((quake: any, index: number) => {
                 // Tentukan warna berdasarkan besaran magnitudo
@@ -151,11 +160,11 @@ export default async function GempaPage() {
                         <p className="text-xs text-slate-500">{quake.Jam}</p>
                       </div>
                     </div>
-                    
+
                     <h4 className="text-sm font-bold text-slate-200 mb-2 line-clamp-2" title={quake.Wilayah}>
                       {quake.Wilayah}
                     </h4>
-                    
+
                     <div className="flex items-center gap-4 text-xs text-slate-400 font-mono mt-4 pt-4 border-t border-slate-800/50">
                       <span title="Kedalaman">⬇️ {quake.Kedalaman}</span>
                       <span title="Koordinat">📍 {quake.Lintang}, {quake.Bujur}</span>

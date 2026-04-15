@@ -18,7 +18,7 @@ export default function Navbar() {
           {/* Desktop Menu */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
-              <Link href="/bmkg" className="text-slate-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
+              <Link href="/" className="text-slate-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
                 Beranda
               </Link>
               <Link href="/bmkg/cuaca" className="text-slate-300 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">

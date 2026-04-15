@@ -1,6 +1,6 @@
-import { 
-  Code, Smartphone, Rocket, ShieldCheck, 
-  Building2, Coffee, Globe2, Briefcase, MonitorPlay 
+import {
+  Code, Smartphone, Rocket, ShieldCheck,
+  Building2, Coffee, Globe2, Briefcase, MonitorPlay
 } from "lucide-react";
 
 export const servicesData = [
@@ -49,6 +49,30 @@ export const portfolioData = [
     category: "Web App",
     description: "Learning Management System with AI-driven curriculum recommendations.",
     color: "from-purple-400 to-pink-600"
+  },
+  {
+    id: 5,
+    title: "TicTacToe Game",
+    category: "Entertainments",
+    description: "Learning Management System with AI-driven curriculum recommendations.",
+    color: "from-purple-400 to-pink-600",
+    link: "/Tictactoe" // <-- Ubah bagian ini
+  },
+  {
+    id: 6,
+    title: "Tetris Game",
+    category: "Entertainments",
+    description: "Learning Management System with AI-driven curriculum recommendations.",
+    color: "from-purple-400 to-pink-600",
+    link: "/Tetris" // <-- Ubah bagian ini
+  },
+  {
+    id: 7,
+    title: "Informasi BMKG",
+    category: "Web App",
+    description: "Informasi BMKG .",
+    color: "from-purple-400 to-pink-600",
+    link: "/bmkg" // <-- Ubah bagian ini
   }
 ];
 

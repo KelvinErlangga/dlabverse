@@ -5,6 +5,7 @@ import Board from "./components/Board";
 import ScoreBoard from "./components/ScoreBoard";
 import GameStatus from "./components/GameStatus";
 import { calculateWinner, Player } from "./utils/GameLogic";
+import Link from "next/link";
 
 export default function Home() {
   const [history, setHistory] = useState<Player[][]>([Array(9).fill(null)]);
@@ -14,7 +15,7 @@ export default function Home() {
 
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
-  
+
   const winData = calculateWinner(currentSquares);
   const winner = winData?.winner || null;
   const winningLine = winData?.line || null;
@@ -32,13 +33,13 @@ export default function Home() {
         localStorage.setItem("ticTacScores", JSON.stringify(newScores));
         return newScores;
       });
-      playSound('/win-sound.mp3'); 
+      playSound('/win-sound.mp3');
     }
   }, [winner]);
 
   const playSound = (src: string) => {
     const audio = new Audio(src);
-    audio.play().catch(() => {});
+    audio.play().catch(() => { });
   };
 
   const handlePlay = useCallback((nextSquares: Player[]) => {
@@ -61,7 +62,7 @@ export default function Home() {
         const availableSpots = currentSquares
           .map((sq, i) => (sq === null ? i : null))
           .filter((val) => val !== null) as number[];
-        
+
         if (availableSpots.length > 0) {
           const randomIdx = Math.floor(Math.random() * availableSpots.length);
           const nextSquares = currentSquares.slice();
@@ -91,10 +92,12 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center p-4 font-sans">
+    <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center p-4 font-sans relative">
+
+
       {/* Container Utama: Kolom di Mobile, Baris di Desktop */}
       <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-12 lg:gap-24 w-full max-w-5xl">
-        
+
         {/* BAGIAN KIRI: Informasi & Kontrol */}
         <div className="flex flex-col items-center lg:items-start w-full lg:w-1/2">
           <h1 className="text-5xl font-black mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-red-400 tracking-tight text-center lg:text-left">
@@ -102,7 +105,7 @@ export default function Home() {
           </h1>
 
           <ScoreBoard scores={scores} />
-          
+
           <div className="h-16 flex items-center">
             <GameStatus winner={winner} isDraw={isDraw} xIsNext={xIsNext} />
           </div>
@@ -131,11 +134,10 @@ export default function Home() {
                 setIsAgainstAI(!isAgainstAI);
                 resetGame();
               }}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors border ${
-                isAgainstAI 
-                  ? "bg-purple-600/20 border-purple-500 text-purple-300" 
-                  : "bg-gray-800 border-gray-700 hover:bg-gray-700"
-              }`}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors border ${isAgainstAI
+                ? "bg-purple-600/20 border-purple-500 text-purple-300"
+                : "bg-gray-800 border-gray-700 hover:bg-gray-700"
+                }`}
             >
               🤖 Mode AI: {isAgainstAI ? "ON" : "OFF"}
             </button>
@@ -145,7 +147,14 @@ export default function Home() {
             >
               🗑 Reset Skor
             </button>
+          
+
+            <Link href="/" className="absolute top-6 left-6 text-gray-400 hover:text-white transition-colors flex items-center gap-2 font-medium z-10">
+              ← Kembali
+            </Link>
           </div>
+
+
         </div>
 
         {/* BAGIAN KANAN: Papan Permainan */}
